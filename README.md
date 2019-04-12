@@ -11,5 +11,10 @@ go_line_chat
 
 This package can be installed with the go get command:
 
-    go get github.com/JianBiHua/go_line_chat/cmd/...
+    go get github.com/JianBiHua/go_line_chat
+
+### 用到的库
+```Bash
+go getgithub.com/mattn/go-sqlite3 #go-sqlite3
+```
 
