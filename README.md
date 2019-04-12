@@ -13,8 +13,3 @@ This package can be installed with the go get command:
 
     go get github.com/JianBiHua/go_line_chat/cmd/...
 
-
-开发中用到了sqlite3
-```Bash
-go get github.com/mattn/go-sqlite3
-```
