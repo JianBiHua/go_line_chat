@@ -9,11 +9,13 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+// Sqlite3Impl is sqlite3 impl
 type Sqlite3Impl struct {
 	db *sql.DB
 }
 
-func NewSqlImpl() *Sqlite3Impl {
+// NewSqlite3Impl is static create sqlite3 impl
+func NewSqlite3Impl() *Sqlite3Impl {
 	var s = new(Sqlite3Impl)
 	return s
 }
