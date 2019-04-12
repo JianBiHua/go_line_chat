@@ -14,6 +14,7 @@ This package can be installed with the go get command:
     go get github.com/JianBiHua/go_line_chat
 
 ### 用到的库
+| Name | Path |
 |:---:|:---|
 | go-sqlite3 | go getgithub.com/mattn/go-sqlite3|
 
