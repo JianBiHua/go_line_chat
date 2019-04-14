@@ -1,9 +1,9 @@
 package main
 
 import (
-	"GoWorkspace/go_line_chat/src/chatlog"
-	"GoWorkspace/go_line_chat/src/configer"
-	"GoWorkspace/go_line_chat/src/servers/mainserver"
+	"GoWorkspace/go_line_chat/src/server/chatlog"
+	"GoWorkspace/go_line_chat/src/server/configer"
+	"GoWorkspace/go_line_chat/src/server/servers/mainserver"
 	"bufio"
 	"flag"
 	"fmt"
@@ -40,6 +40,11 @@ func main() {
 
 	//
 	fmt.Println(strings.Join(os.Args[1:], " "))
+
+	// var a int
+	// typeOfA := reflect.TypeOf(a)
+	// fmt.Println(typeOfA.Name(), typeOfA.Kind())
+
 	// c1, err := redis.Dial("tcp", "127.0.0.1:6379")
 	// if err != nil {
 	// 	fmt.Println("redis.Dial", err)
@@ -58,6 +63,11 @@ func main() {
 	// c2.Flush()
 	// rec2, err := c2.Receive()
 	// fmt.Println(string(rec2.([]byte)))
+
+	// sqlite3 := sql.NewSqlite3Impl()
+	// sqlite3.Open()
+	// sqlite3.Insert(sql.NewUser("123", "345"))
+	// sqlite3.Close()
 
 	// 通过命令行, 获取服务的端口号
 	var port int

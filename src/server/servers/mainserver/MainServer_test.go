@@ -6,7 +6,7 @@ package mainserver
 import "testing"
 
 func TestMainServer_Start(t *testing.T) {
-	ms := new (MainServer)
+	ms := new(MainServer)
 	defer ms.Stop()
 
 	ms.Start()
@@ -18,7 +18,7 @@ func TestStartMainServer(t *testing.T) {
 
 // 测试Restart
 func TestMainServer_Restart(t *testing.T) {
-	ms := new (MainServer)
+	ms := new(MainServer)
 	defer ms.Stop()
 
 	ms.Restart()

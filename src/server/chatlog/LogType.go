@@ -8,6 +8,7 @@ import (
 // LogType log type
 type LogType int
 
+// define log type const
 const (
 	// LOGMAIN is main log
 	LOGMAIN = iota
@@ -19,6 +20,8 @@ const (
 	LOGFILE
 	// LOGCHAT is chat server log
 	LOGCHAT
+	// LOGSQL is Sql log
+	LOGSQL
 
 	// LOGUSER 用户自定义消息类型。
 	LOGUSER = 100
@@ -29,7 +32,7 @@ const (
 // t: 日志类型。
 // 返回:
 //	string 日志文件名
-func GetLogName (t LogType) string  {
+func GetLogName(t LogType) string {
 	switch t {
 	case LOGMAIN:
 		return "main.log"

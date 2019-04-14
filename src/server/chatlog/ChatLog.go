@@ -2,15 +2,15 @@
 package chatlog
 
 import (
-	"GoWorkspace/go_line_chat/src/configer"
-	"GoWorkspace/go_line_chat/src/toolunit"
+	"GoWorkspace/go_line_chat/src/server/configer"
+	"GoWorkspace/go_line_chat/src/server/toolunit"
 	"fmt"
 	"io/ioutil"
 	"os"
 	"time"
 )
 
-func getPath (logType LogType) string {
+func getPath(logType LogType) string {
 	// 获取日志文件路径。
 	path, _ := toolunit.GetPathInstance().GetLogPath(GetLogName(logType))
 	return path
@@ -24,7 +24,7 @@ func getPath (logType LogType) string {
 // 转换文件格式的函数
 //decoder := mahonia.NewDecoder("gbk")
 //f.gbkFile = decoder.NewReader(f.file)
-func Append (logType LogType, msg string)  {
+func Append(logType LogType, msg string) {
 	// 获取应用目录
 	path := getPath(logType)
 	// 打开一个追加文件
@@ -39,7 +39,7 @@ func Append (logType LogType, msg string)  {
 	defer file.Close()
 
 	// 消息加当前时间，
-	var content = time.Now().Format("2006-01-02 15:04:05") +" "+ msg+"\r\n"
+	var content = time.Now().Format("2006-01-02 15:04:05") + " " + msg + "\r\n"
 
 	// 打印日志。
 	if configer.CurrentLogMode == int(logType) {
@@ -57,16 +57,16 @@ func Append (logType LogType, msg string)  {
 // logType: 日志类型
 // 返回
 // 无
-func Clear (logType LogType) {
+func Clear(logType LogType) {
 	// 删除指定类型的目录文件。
 	path := getPath(logType)
 	os.Remove(path)
 }
 
 // ClearAll 直接删除日志目录下的所有文件
-func ClearAll ()  {
+func ClearAll() {
 	// 直接删除日志目录。
-	log,_ := toolunit.GetPathInstance().GetLogPath("")
+	log, _ := toolunit.GetPathInstance().GetLogPath("")
 	os.RemoveAll(log)
 }
 
@@ -76,7 +76,7 @@ func ClearAll ()  {
 // 返回
 // string: 日志文件中的所有内容
 // error: 读文件出的错误
-func Read (logType LogType) (string, error)  {
+func Read(logType LogType) (string, error) {
 	// 获取应用目录
 	path := getPath(logType)
 	// 打开一个追加文件

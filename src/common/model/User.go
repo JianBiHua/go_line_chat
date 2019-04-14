@@ -31,12 +31,17 @@ type User struct {
 
 	// 最后一次登录日期
 	lastDate string
+
+	// 状态
+	status int
 }
 
 // NewUser is new user
 // params:
 // 	username(string) is user name
 // 	password(string) is pass word
+// out:
+//  a user object pointer
 func NewUser(username, password string) *User {
 	var user = new(User)
 	user.UserName = username
