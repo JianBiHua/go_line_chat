@@ -124,7 +124,7 @@ func (s *Sqlite3Impl) Insert(prepare string, param ...interface{}) (int64, error
 //
 // Example:
 // var cmd = fmt.Sprintf("SELECT id,userName,password FROM UserTable1 WHERE id=%d", user.id)
-// err := Exec2(cmd, func(p ...interface{}){
+// err := Get(cmd, func(p ...interface{}){
 // 	for key, value := range param {
 // 		fmt.Print("", key, value)
 // 	}

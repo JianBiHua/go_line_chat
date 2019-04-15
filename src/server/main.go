@@ -6,15 +6,15 @@ import (
 	"GoWorkspace/go_line_chat/src/server/servers/mainserver"
 	"bufio"
 	"flag"
-	"fmt"
 	"os"
-	"strings"
 )
 
+// 打印输出日志，
 func log(msg string) {
 	chatlog.Append(chatlog.LOGMAIN, msg)
 }
 
+// 显示菜单，
 func showMenu() {
 	log("===========命令菜单======")
 	// 打印菜单像
@@ -37,38 +37,6 @@ func showMenu() {
 // 执行应用:
 // LineChat -port 8889
 func main() {
-
-	//
-	fmt.Println(strings.Join(os.Args[1:], " "))
-
-	// var a int
-	// typeOfA := reflect.TypeOf(a)
-	// fmt.Println(typeOfA.Name(), typeOfA.Kind())
-
-	// c1, err := redis.Dial("tcp", "127.0.0.1:6379")
-	// if err != nil {
-	// 	fmt.Println("redis.Dial", err)
-	// }
-	// defer c1.Close()
-	// c2, err := redis.DialURL("redis://127.0.0.1:6379")
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// defer c2.Close()
-
-	// rec1, err := c1.Do("Get", "foo")
-	// fmt.Println(string(rec1.([]byte)))
-
-	// c2.Send("Get", "foo")
-	// c2.Flush()
-	// rec2, err := c2.Receive()
-	// fmt.Println(string(rec2.([]byte)))
-
-	// sqlite3 := sql.NewSqlite3Impl()
-	// sqlite3.Open()
-	// sqlite3.Insert(sql.NewUser("123", "345"))
-	// sqlite3.Close()
-
 	// 通过命令行, 获取服务的端口号
 	var port int
 	flag.IntVar(&port, "port", 8888, "set main server port")
