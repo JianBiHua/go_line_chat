@@ -3,6 +3,7 @@ package sql
 import (
 	"GoWorkspace/go_line_chat/src/server/chatlog"
 	"database/sql"
+	"errors"
 	"fmt"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -11,6 +12,17 @@ import (
 // Sqlite3Impl is sqlite3 impl
 type Sqlite3Impl struct {
 	db *sql.DB
+}
+
+var instance *Sqlite3Impl
+
+// GetInstance is 模拟单例实现功能
+func GetInstance() *Sqlite3Impl {
+	if instance == nil {
+		instance = new(Sqlite3Impl)
+	}
+
+	return instance
 }
 
 // NewSqlite3Impl is static create sqlite3 impl
@@ -48,7 +60,7 @@ func (s *Sqlite3Impl) Close() {
 	s.db.Close()
 }
 
-// createTable is 创建数据表
+// CreateTable is 创建数据表
 // func (s *Sqlite3Impl) createTable() {
 // 	var err error
 // 	err = createTable(SQLCommandUser)
@@ -62,7 +74,7 @@ func (s *Sqlite3Impl) Close() {
 // 	err = createTable(SQLCommandFriends)
 // 	s.log(fmt.Sprintf("error: %v, %s", err, SQLTableFriends))
 // }
-func (s *Sqlite3Impl) createTable(cmd string) error {
+func (s *Sqlite3Impl) CreateTable(cmd string) error {
 	_, err := s.db.Exec(cmd)
 	return err
 }
@@ -72,20 +84,20 @@ func (s *Sqlite3Impl) createTable(cmd string) error {
 // Example:
 //
 // 	delete:
-//	err := UpdateOrDelete(fmt.Spintf("DELETE FROM UserTable1 WHERE id=?", id))
+//	err := UpdateOrDelete(fmt.Spintf("DELETE FROM UserTable1 WHERE id=1"))
 //
 //	update:
-//	err := UpdateOrDelete(fmt.Spintf("UPDATE UserTable1 SET userName=%s,password=%s WHERE id=%d", "user2", "password2", id)
+//	err := UpdateOrDelete(fmt.Spintf("UPDATE UserTable1 SET userName=\"user2\",password=\"password2\" WHERE id=1")
 //
-func (s *Sqlite3Impl) UpdateOrDelete(prepare string, param ...interface{}) (int64, error) {
+func (s *Sqlite3Impl) UpdateOrDelete(prepare string) (int64, error) {
 	//插入数据
-	stmt, err := s.db.Prepare(prepare)
-	if err != nil {
-		return -1, err
-	}
-	defer stmt.Close()
+	// stmt, err := s.db.Prepare(prepare)
+	// if err != nil {
+	// 	return -1, err
+	// }
+	// defer stmt.Close()
 
-	res, err := stmt.Exec(param)
+	res, err := s.db.Exec(prepare)
 	if err != nil {
 		return -1, err
 	}
@@ -98,16 +110,21 @@ func (s *Sqlite3Impl) UpdateOrDelete(prepare string, param ...interface{}) (int6
 	return id, err
 }
 
-// Insert is
-func (s *Sqlite3Impl) Insert(prepare string, param ...interface{}) (int64, error) {
+// Insert is insert sql object to table
+//
+// Example:
+//
+// Insert(fmt.Sprintf("INSERT INTO %s(userName, password) values(%s,%s)",
+//		sql.SQLTableUser, "user", "password"))
+func (s *Sqlite3Impl) Insert(prepare string) (int64, error) {
 	//插入数据
-	stmt, err := s.db.Prepare(prepare)
-	if err != nil {
-		return -1, err
-	}
-	defer stmt.Close()
+	// stmt, err := s.db.Prepare(prepare)
+	// if err != nil {
+	// 	return -1, err
+	// }
+	// defer stmt.Close()
 
-	res, err := stmt.Exec(param)
+	res, err := s.db.Exec(prepare)
 	if err != nil {
 		return -1, err
 	}
@@ -139,6 +156,7 @@ func (s *Sqlite3Impl) Get(cmd string, f func(...interface{}), param ...interface
 
 	defer rows.Close()
 
+	var success = false
 	for rows.Next() {
 		err := rows.Scan(param)
 		if err != nil {
@@ -147,7 +165,12 @@ func (s *Sqlite3Impl) Get(cmd string, f func(...interface{}), param ...interface
 		}
 
 		f(param)
+		success = true
 	}
 
-	return nil
+	if success {
+		return nil
+	}
+
+	return errors.New("not found")
 }

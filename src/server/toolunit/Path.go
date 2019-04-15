@@ -31,11 +31,11 @@ func (p *Path) mkdir(path string) {
 func (p *Path) initPath() {
 	//
 	// 创建数据库目录
-	var path, _ = p.GetDBPath("")
+	var path = p.GetDBPath("")
 	p.mkdir(path)
 
 	// 创建日志目录。
-	path, _ = p.GetLogPath("")
+	path = p.GetLogPath("")
 	p.mkdir(path)
 }
 
@@ -62,9 +62,9 @@ func (p *Path) GetExecPath2(name string) (string, error) {
 // 返回:
 // string: 返回运行程序所在的路径+name
 // error: 错误信息
-func (p *Path) GetLogPath(name string) (string, error) {
-	path, err := p.GetRootPath()
-	return path + "/log/" + name, err
+func (p *Path) GetLogPath(name string) string {
+	path, _ := p.GetRootPath()
+	return path + "/log/" + name
 }
 
 // GetDBPath is Get DataBase Dir Path
@@ -73,7 +73,7 @@ func (p *Path) GetLogPath(name string) (string, error) {
 // return:
 //	string: is DataBase Dir sub dir path
 //  error: is error
-func (p *Path) GetDBPath(name string) (string, error) {
-	path, err := p.GetRootPath()
-	return path + "/databases/" + name, err
+func (p *Path) GetDBPath(name string) string {
+	path, _ := p.GetRootPath()
+	return path + "/databases/" + name
 }

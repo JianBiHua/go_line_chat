@@ -4,6 +4,8 @@ import (
 	"GoWorkspace/go_line_chat/src/server/chatlog"
 	"GoWorkspace/go_line_chat/src/server/configer"
 	"GoWorkspace/go_line_chat/src/server/servers/mainserver"
+	"GoWorkspace/go_line_chat/src/server/sql"
+	"GoWorkspace/go_line_chat/src/server/toolunit"
 	"bufio"
 	"flag"
 	"os"
@@ -44,6 +46,16 @@ func main() {
 
 	// 启动Server
 	mainserver.StartMainServer(port)
+	// 打开数据库
+	sql.GetInstance().Open(toolunit.GetPathInstance().GetDBPath(sql.SQLDataBaseName))
+	// 创建表
+	sql.GetInstance().CreateTable(sql.SQLCommandUser)
+	sql.GetInstance().CreateTable(sql.SQLCommandUserChatGroup)
+	sql.GetInstance().CreateTable(sql.SQLCommandUserChatGroupMember)
+	sql.GetInstance().CreateTable(sql.SQLCommandUserChatMsg)
+	sql.GetInstance().CreateTable(sql.SQLCommandFriends)
+	// 延迟关闭数据库
+	defer sql.GetInstance().Close()
 
 	// 设置日志模式。
 	configer.CurrentLogMode = chatlog.LOGMAIN

@@ -12,7 +12,7 @@ import (
 
 func getPath(logType LogType) string {
 	// 获取日志文件路径。
-	path, _ := toolunit.GetPathInstance().GetLogPath(GetLogName(logType))
+	path := toolunit.GetPathInstance().GetLogPath(GetLogName(logType))
 	return path
 }
 
@@ -66,7 +66,7 @@ func Clear(logType LogType) {
 // ClearAll 直接删除日志目录下的所有文件
 func ClearAll() {
 	// 直接删除日志目录。
-	log, _ := toolunit.GetPathInstance().GetLogPath("")
+	log := toolunit.GetPathInstance().GetLogPath("")
 	os.RemoveAll(log)
 }
 

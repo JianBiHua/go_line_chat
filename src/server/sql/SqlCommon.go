@@ -74,7 +74,7 @@ const (
 	// max: 最大个数
 	// icon: 图标路径
 	// createDate: 创建时间
-	// type: 组类型，0: 一对一， 1：群(qq)  2：讨论组(qq)，3: 公众号 ...等等
+	// type: 组类型，0: 一对一， 1：群(qq)  2：讨论组(qq)，3: 公众号, 4: 临时聊天 ...等等
 	SQLCommandUserChatGroup = "CREATE TABLE IF NOT EXISTS " + SQLTableChatGroup +
 		`(
 			"id" INTEGER PRIMARY KEY AUTOINCREMENT,
