@@ -44,6 +44,7 @@ func (s *Sqlite3Impl) Open(path string) error {
 	// 打开数据库
 	var err error
 	s.db, err = sql.Open("sqlite3", path)
+	fmt.Printf("open sql: " + path)
 	if err == nil {
 		s.log("Sqlite3 Is Open")
 	} else {
@@ -147,7 +148,7 @@ func (s *Sqlite3Impl) Insert(prepare string) (int64, error) {
 // 	}
 //}, &userName, &password)
 //
-func (s *Sqlite3Impl) Get(cmd string, f func(...interface{}), param ...interface{}) error {
+func (s *Sqlite3Impl) Get(cmd string, f func(...interface{}), dest ...interface{}) error {
 	rows, err := s.db.Query(cmd)
 	if err != nil {
 		s.log(fmt.Sprintf("Get error : %v", err))
@@ -157,14 +158,19 @@ func (s *Sqlite3Impl) Get(cmd string, f func(...interface{}), param ...interface
 	defer rows.Close()
 
 	var success = false
+
 	for rows.Next() {
-		err := rows.Scan(param)
+		// 这里有个小技巧:
+		// dest... : 就是告诉Scan，我传的是一个可变参数，而不是一个参数。
+		err := rows.Scan(dest...)
 		if err != nil {
 			s.log(fmt.Sprintf("Get error : %v", err))
+			fmt.Printf(fmt.Sprintf("Get error : %v", err))
 			return err
 		}
 
-		f(param)
+		// 返回可变参数
+		f(dest...)
 		success = true
 	}
 

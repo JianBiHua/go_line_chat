@@ -76,15 +76,23 @@ const (
 	// }
 	MSGFriendDel = "Del"
 
-	// MSGNewChatGroup 建聊天组
+	// MSGChatGroupCreate 建聊天组
 	//
 	// 请求消息:
 	// {
-	//	"type" : "Group",
+	//	"type" : "GroupCreate",
 	//	"users" : ["user1", "user2"] //对端用户名组。
 	//  "isGroup" : 0	//是否是群组
 	// }
-	MSGNewChatGroup = "Group"
+	MSGChatGroupCreate = "GroupCreate"
+
+	// MSGChatGroupCreate 建聊天组
+	//
+	// 请求消息:
+	// {
+	//	"type" : "GroupGet"
+	// }
+	MSGChatGroupGet = "GroupGet"
 
 	// MSGChat 聊天，发送聊天信息。
 	//
@@ -112,4 +120,51 @@ const (
 	//  ...
 	// }
 	MSGUpdate = "Update"
+
+	// MSGFriendGet 获取好友信息
+	//
+	// {
+	//	"type" : "FriendGet"
+	// }
+	MSGFriendGet = "FriendGet"
+
+	// MSGMsg 获取说有历史消息
+	MSGMsg = "Msg"
+)
+
+// MSGType is msg type
+type MSGType int
+
+// msg type
+const (
+	// MSGTypeText 文字
+	MSGTypeText = iota
+	//
+	MSGTypePicture
+	//
+	MSGTypeAudio
+	//
+	MSGTypeVideo
+	//
+	MSGTypeWebPage
+	//
+	MSGTypeAddFriend
+	//
+	MSGTypeAddFriendSuccess
+)
+
+// MSGGroupType is group type
+type MSGGroupType int
+
+// 一对一， 群(qq)， 讨论组(qq)，公众号, 临时聊天 ...等等
+// 现只管MSGGroupTypeOne2One，MSGGroupTypeOne2One2，MSGGroupTypeGroup
+const (
+	// MSGGroupTypeOne2One 一对一
+	MSGGroupTypeOne2One = iota
+
+	// MSGGroupTypeOne2One2 一对一, 私聊，不是好友的情况
+	MSGGroupTypeOne2One2
+
+	// MSGGroupTypeGroup 群聊
+	MSGGroupTypeGroup
 )

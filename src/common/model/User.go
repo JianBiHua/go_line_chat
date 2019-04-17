@@ -1,39 +1,42 @@
-package sql
+package model
 
 // User is user object
 type User struct {
 	// 数据ID号
-	id int64
+	Id int64
 
 	// 用户名
-	name string
+	Name string `json:"name"`
 
 	// 年龄
-	age int
+	Age string `json:"age"`
 
 	// 性别
-	sex int
+	Sex int `json:"sex"`
 
 	// 用户名
-	UserName string
+	UserName string `json:"user"`
 
 	// 密码
 	Password string
 
 	// 图片
-	icon string
+	Icon string `json:"icon"`
 
 	// 个性签名
-	signature string
+	Signature string `json:"signature"`
 
 	// 创建日期
-	createDate string
+	CreateDate string `json:"createDate"`
 
 	// 最后一次登录日期
-	lastDate string
+	LastDate string `json:"lastDate"`
 
 	// 状态
-	status int
+	Status int
+
+	// 进组日期
+	JoinDate string `json:"joinDate"`
 }
 
 // NewUser is new user

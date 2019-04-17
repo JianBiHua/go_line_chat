@@ -78,8 +78,6 @@ func (mainServer *MainServer) startListen() {
 			mainServer.log("conn fail ...")
 		} else {
 			mainServer.log(fmt.Sprintf("客户端连接: %s", client.RemoteAddr().String()))
-			configer.ClientMap.Store("test", client)
-			mainServer.log(fmt.Sprintf("configer.ClientMap1: %v", configer.ClientMap))
 
 			// 当客户连接时，启动一个线程，处理线程的消息。
 			go mainServer.onClientConnect(client)

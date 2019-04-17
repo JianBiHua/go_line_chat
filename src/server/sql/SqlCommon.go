@@ -4,7 +4,7 @@ package sql
 const (
 
 	// 数据库名称
-	SQLDataBaseName = "LineChat1.db"
+	SQLDataBaseName = "LineChat.db"
 
 	// 用户表
 	//
@@ -38,7 +38,7 @@ const (
 	//
 	// table member item info:
 	// id :
-	// userName : 用户名
+	// user : 用户名
 	// password : 密码
 	// sex : 性别
 	// name : 显示的名称
@@ -54,10 +54,10 @@ const (
 			"userName" varchar(30) unique,
 			"password" varchar(30),
 			"sex" int(2) default 0,
-			"name" varchar(20) NULL,
+			"name" varchar(20) default "",
 			"age" TIMESTAMP default (datetime('now', 'localtime')) ,
-			"icon" varchar (200) NULL,
-			"signature" varchar (500) NULL,
+			"icon" varchar (200) default "",
+			"signature" varchar (500) default "",
 			"joinDate" TIMESTAMP default (datetime('now', 'localtime')),
 			"lastDate" TIMESTAMP default (datetime('now', 'localtime')),
 			"status" int(5) default 0
@@ -74,7 +74,7 @@ const (
 	// max: 最大个数
 	// icon: 图标路径
 	// createDate: 创建时间
-	// type: 组类型，0: 一对一， 1：群(qq)  2：讨论组(qq)，3: 公众号, 4: 临时聊天 ...等等
+	// type: 组类型，
 	SQLCommandUserChatGroup = "CREATE TABLE IF NOT EXISTS " + SQLTableChatGroup +
 		`(
 			"id" INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -82,7 +82,7 @@ const (
 			"signature" varchar(500) default NULL,
 			"max" int(8) default 100,
 			"type" int(8) default 0,
-			"icon" varchar(200) default NULL,
+			"icon" varchar(200) default "",
 			"createDate" TIMESTAMP default (datetime('now', 'localtime'))
 		);
 	`
@@ -91,7 +91,7 @@ const (
 	//
 	// table member item info:
 	// id :
-	// userName : 用户名。
+	// user : 用户名。
 	// joinDate: 进入组时间。
 	SQLCommandUserChatGroupMember = "CREATE TABLE IF NOT EXISTS " + SQLTableChatGroupMember +
 		`(
@@ -104,11 +104,12 @@ const (
 		"CREATE INDEX IF NOT EXISTS MemberUser ON " + SQLTableChatGroupMember + "(userName);" +
 		"CREATE INDEX IF NOT EXISTS MemberGroupId ON " + SQLTableChatGroupMember + "(groupId);"
 
-	// create User Chat Group member Table's sql command
+	// create User Chat old msg Table's sql command
 	//
 	// table member item info:
 	// id :
-	// userName : 发送消息的用户。
+	// user : 发送消息的用户。
+	// user2 : 对端用户。
 	// sendDate: 发送的时间。
 	// comment: 发送的内容, 可能是文件，或者图片路径或者网页路径等。
 	// type: 消息类型: 0: text 1: picture 2: audio 3: video 4: web page，5: 添加好友
@@ -116,27 +117,28 @@ const (
 		`(
 			"id" INTEGER PRIMARY KEY AUTOINCREMENT,
 			"userName" varchar(30) not null,
+			"userName2" varchar(30) not null,
+			"groupId" int default 0,
 			"sendDate" TIMESTAMP default (datetime('now', 'localtime')),
-			"comment" TEXT,
+			"comment" TEXT default null,
 			"type" int default 0
-		);
-	` +
+		);` +
 		"CREATE INDEX IF NOT EXISTS MsgUser ON " + SQLTableChatMsg + "(userName);"
 
 	// create User Friends Table's sql command
 	//
 	// table friends info:
 	// id :
-	// userName1: user 1
-	// userName2: user 2
+	// user1: user 1
+	// user2: user 2
 	// joniDate: 成为好友的时间。
 	SQLCommandFriends = "CREATE TABLE IF NOT EXISTS " + SQLTableFriends +
 		`(
 			"id" INTEGER PRIMARY KEY AUTOINCREMENT,
-			"userName1" varchar(30) not null,
+			"userName" varchar(30) not null,
 			"userName2" varchar(30) not null,
 			"joniDate" TIMESTAMP default (datetime('now', 'localtime'))
 		);
 	` +
-		"CREATE INDEX IF NOT EXISTS FriendsUser ON " + SQLTableFriends + "(userName1, userName2);"
+		"CREATE INDEX IF NOT EXISTS FriendsUser ON " + SQLTableFriends + "(userName, userName2);"
 )

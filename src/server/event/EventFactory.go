@@ -27,9 +27,12 @@ func (ef *EventFactory) init() {
 	ef.eventMap[message.MSGLoginOut] = new(EventLoginOut)
 	ef.eventMap[message.MSGFriendAdd] = new(EventFriendAdd)
 	ef.eventMap[message.MSGFriendDel] = new(EventFriendDel)
-	ef.eventMap[message.MSGNewChatGroup] = new(EventNewChatGroup)
+	ef.eventMap[message.MSGChatGroupCreate] = new(EventChatGroupCreate)
 	ef.eventMap[message.MSGChat] = new(EventChat)
 	ef.eventMap[message.MSGUpdate] = new(EventUpdate)
+	ef.eventMap[message.MSGFriendGet] = new(EventFriendGet)
+	ef.eventMap[message.MSGMsg] = new(EventMsg)
+	ef.eventMap[message.MSGChatGroupGet] = new(EventChatGroupGet)
 }
 
 // Parse is parse json string, to dispenser msg
