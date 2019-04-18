@@ -78,14 +78,15 @@ const (
 	SQLCommandUserChatGroup = "CREATE TABLE IF NOT EXISTS " + SQLTableChatGroup +
 		`(
 			"id" INTEGER PRIMARY KEY AUTOINCREMENT,
-			"name" varchar(20) default NULL,
-			"signature" varchar(500) default NULL,
+			"name" varchar(20) default "",
+			"signature" varchar(500) default "",
 			"max" int(8) default 100,
 			"type" int(8) default 0,
 			"icon" varchar(200) default "",
 			"createDate" TIMESTAMP default (datetime('now', 'localtime'))
 		);
-	`
+	` +
+		"CREATE INDEX IF NOT EXISTS GroupType ON " + SQLTableChatGroup + "(type);"
 
 	// create User Chat Group member Table's sql command
 	//
@@ -101,15 +102,13 @@ const (
 			"joinDate" TIMESTAMP default (datetime('now', 'localtime'))
 		);
 	` +
-		"CREATE INDEX IF NOT EXISTS MemberUser ON " + SQLTableChatGroupMember + "(userName);" +
-		"CREATE INDEX IF NOT EXISTS MemberGroupId ON " + SQLTableChatGroupMember + "(groupId);"
+		"CREATE INDEX IF NOT EXISTS MemberIndex ON " + SQLTableChatGroupMember + "(userName, groupId);"
 
 	// create User Chat old msg Table's sql command
 	//
 	// table member item info:
 	// id :
 	// user : 发送消息的用户。
-	// user2 : 对端用户。
 	// sendDate: 发送的时间。
 	// comment: 发送的内容, 可能是文件，或者图片路径或者网页路径等。
 	// type: 消息类型: 0: text 1: picture 2: audio 3: video 4: web page，5: 添加好友
@@ -117,13 +116,12 @@ const (
 		`(
 			"id" INTEGER PRIMARY KEY AUTOINCREMENT,
 			"userName" varchar(30) not null,
-			"userName2" varchar(30) not null,
 			"groupId" int default 0,
 			"sendDate" TIMESTAMP default (datetime('now', 'localtime')),
-			"comment" TEXT default null,
+			"comment" TEXT default "",
 			"type" int default 0
 		);` +
-		"CREATE INDEX IF NOT EXISTS MsgUser ON " + SQLTableChatMsg + "(userName);"
+		"CREATE INDEX IF NOT EXISTS MsgIndex ON " + SQLTableChatMsg + "(userName, groupId);"
 
 	// create User Friends Table's sql command
 	//
@@ -140,5 +138,6 @@ const (
 			"joniDate" TIMESTAMP default (datetime('now', 'localtime'))
 		);
 	` +
-		"CREATE INDEX IF NOT EXISTS FriendsUser ON " + SQLTableFriends + "(userName, userName2);"
+		// 创建联合唯一索引
+		"CREATE unique INDEX IF NOT EXISTS FriendsUser ON " + SQLTableFriends + "(userName, userName2);"
 )

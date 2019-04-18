@@ -24,7 +24,7 @@ func (a *EventChatGroupGet) Parse(jsonReslut map[string]interface{}, client net.
 	// 获取用户名
 	var userName = configer.ClientMap.GetKey(client)
 	if len(userName) == 0 {
-		client.Write([]byte("{\"type\":\"EventChatGroupGet\",\"result\":\"user is not login in\"}\r\n"))
+		client.Write([]byte("{\"type\":\"GroupGet\",\"result\":\"user is not login in\"}\r\n"))
 		return
 	}
 
@@ -33,9 +33,9 @@ func (a *EventChatGroupGet) Parse(jsonReslut map[string]interface{}, client net.
 	// 临时组变量
 	group := new(model.UserChatGroup)
 
-	// 搜索
-	cmd := fmt.Sprintf("SELECT * FROM %s WHERE userName=\"%s\"",
-		sql.SQLTableChatGroup, jsonReslut["user"])
+	// 联合查找， 找出组中有
+	cmd := fmt.Sprintf("select * from %s where id in (SELECT groupId FROM %s WHERE userName=\"%s\")",
+		sql.SQLTableChatGroup, sql.SQLTableChatGroupMember, userName)
 
 	// 从数据库中读取组信息。
 	err := sql.GetInstance().Get(cmd, func(param ...interface{}) {
@@ -44,12 +44,12 @@ func (a *EventChatGroupGet) Parse(jsonReslut map[string]interface{}, client net.
 		toolunit.Copy(group2, group)
 		// 追加到切片中。
 		groups = append(groups, group2)
-	}, &group.Id, &group.Name, &group.Signature, &group.Max, &group.GroupType, &group.Icon, &group.CreateDate)
+	}, &group.ID, &group.Name, &group.Signature, &group.Max, &group.GroupType, &group.Icon, &group.CreateDate)
 
 	// 根据数组读取组用户列表。
 	for _, group := range groups {
-		cmd := fmt.Sprintf("SELECT userName,joinDate FROM %s WHERE id=%d",
-			sql.SQLTableChatGroupMember, group.Id)
+		cmd := fmt.Sprintf("SELECT userName,joinDate FROM %s WHERE groupId=%d",
+			sql.SQLTableChatGroupMember, group.ID)
 		user := new(model.User)
 
 		err := sql.GetInstance().Get(cmd, func(param ...interface{}) {
@@ -62,25 +62,28 @@ func (a *EventChatGroupGet) Parse(jsonReslut map[string]interface{}, client net.
 
 		// 根据用户名读取组员详细信息
 		if err == nil {
-			cmd = fmt.Sprintf("SELECT * FROM %s WHERE userName=\"%s\"",
-				sql.SQLTableUser, user.UserName)
+			for _, value := range group.Member {
+				cmd = fmt.Sprintf("SELECT * FROM %s WHERE userName=\"%s\"",
+					sql.SQLTableUser, user.UserName)
 
-			sql.GetInstance().Get(cmd, func(param ...interface{}) {
-				user2 := new(model.User)
-				// 深拷贝
-				toolunit.Copy(user2, user)
-				// 追加到切片中。
-				group.Member = append(group.Member, user2)
-			}, &user.Id, &user.UserName, &user.Password, &user.Sex, &user.Name,
-				&user.Age, &user.Icon, &user.Signature, &user.CreateDate, &user.LastDate, &user.Status)
+				sql.GetInstance().Get(cmd, func(param ...interface{}) {
+					//user2 := new(model.User)
+					// 深拷贝
+					toolunit.Copy(value, user)
+					// 追加到切片中。
+					//group.Member = append(group.Member, user2)
+				}, &user.ID, &user.UserName, &user.Password, &user.Sex, &user.Name,
+					&user.Age, &user.Icon, &user.Signature, &user.CreateDate, &user.LastDate, &user.Status)
+			}
 		}
 	}
 
 	// 将获取到的信息转换成json，发给客户端.
 	result, err := json.Marshal(groups)
 	if err != nil {
+		result = []byte(fmt.Sprintf("{\"type\":\"GroupGet\", groups : %s}", string(result)))
 		client.Write(result)
 	} else {
-		client.Write([]byte("{\"type\":\"EventChatGroupGet\",\"result\":\"group not found\"}\r\n"))
+		client.Write([]byte("{\"type\":\"GroupGet\",\"result\":\"group not found\"}\r\n"))
 	}
 }

@@ -82,7 +82,7 @@ const (
 	// {
 	//	"type" : "GroupCreate",
 	//	"users" : ["user1", "user2"] //对端用户名组。
-	//  "isGroup" : 0	//是否是群组
+	//  "groupType" : 0	//组类型
 	// }
 	MSGChatGroupCreate = "GroupCreate"
 
@@ -99,8 +99,9 @@ const (
 	// 请求消息:
 	// {
 	//	"type" : "Chat",
-	//	"grop" : 1 组ID。
+	//	"group" : 1 组ID。
 	//  "msg" : "我发来一条消息"   //发送的消息
+	//  "msgType" : 0
 	// }
 
 	// 返回消息:
@@ -129,6 +130,11 @@ const (
 	MSGFriendGet = "FriendGet"
 
 	// MSGMsg 获取说有历史消息
+	//
+	// {
+	//	"type" : "Msg"
+	//	"group" : 0
+	// }
 	MSGMsg = "Msg"
 )
 

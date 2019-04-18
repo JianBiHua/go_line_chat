@@ -2,8 +2,8 @@ package model
 
 // User is user object
 type User struct {
-	// 数据ID号
-	Id int64
+	// 数据ID号, 不导出到JSON
+	ID int64 `json:"-"`
 
 	// 用户名
 	Name string `json:"name"`
@@ -17,8 +17,8 @@ type User struct {
 	// 用户名
 	UserName string `json:"user"`
 
-	// 密码
-	Password string
+	// 密码, 不导出到JSON
+	Password string `json:"-"`
 
 	// 图片
 	Icon string `json:"icon"`
@@ -32,8 +32,8 @@ type User struct {
 	// 最后一次登录日期
 	LastDate string `json:"lastDate"`
 
-	// 状态
-	Status int
+	// 状态， 不导出到json
+	Status int `json:"-"`
 
 	// 进组日期
 	JoinDate string `json:"joinDate"`

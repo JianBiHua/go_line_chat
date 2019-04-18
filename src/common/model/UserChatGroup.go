@@ -2,7 +2,7 @@ package model
 
 // UserChatGroup is user chat group object
 type UserChatGroup struct {
-	Id         int64  `json:"id"`
+	ID         int64  `json:"id"`
 	Name       string `json:"name"`
 	Signature  string `json:"signature"`
 	Max        int64  `json:"max"`

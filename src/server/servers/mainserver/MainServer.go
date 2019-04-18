@@ -121,9 +121,29 @@ func (mainServer *MainServer) onClientDisConnect(client net.Conn) {
 // 当读到客户端数据时。
 func (mainServer *MainServer) onReadClientData(client net.Conn, msg string) {
 	// json数据。
-	var jsonReslut map[string]interface{}
+	//var jsonReslut map[string]interface{}
+	jsonReslut := make(map[string]interface{})
+
+	// m := make(map[string]interface{})
+	// m["type"] = "GroupType"
+	// m["users"] = []string{"123", "234"}
+	// m["groupType"] = 0
+
+	// res, _ := json.Marshal(m)
+	// fmt.Println(string(res))
+
+	// err1 := json.Unmarshal([]byte(res), &jsonReslut)
+	// fmt.Printf("err1: %v, %v", err1, jsonReslut)
 
 	// 解析Json数据
+	//var json = jsoniter.ConfigCompatibleWithStandardLibrary
+	// jsonReslut, ok := gjson.Parse(msg).Value().(map[string]interface{})
+	// if !ok {
+	// 	// not a map
+	// 	return
+	// }
+
+	// fmt.Printf("jsonReslut[users]= %v", jsonReslut["users"])
 	err := json.Unmarshal([]byte(msg), &jsonReslut)
 	if err != nil {
 		return

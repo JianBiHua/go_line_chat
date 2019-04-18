@@ -60,12 +60,13 @@ func (a *EventFriendGet) Parse(jsonReslut map[string]interface{}, client net.Con
 			sql.SQLTableUser, value.UserName)
 
 		err = sql.GetInstance().Get(cmd, func(param ...interface{}) {
-			user2 := new(model.User)
+			//user2 := new(model.User)
 			// 深拷贝
-			toolunit.Copy(user2, user)
+			toolunit.Copy(value, user)
+			//fmt.Printf("value: %v", value)
 			// 追加到切片中。
-			users = append(users, user2)
-		}, &user.Id, &user.UserName, &user.Password, &user.Sex, &user.Name,
+			//users = append(users, user2)
+		}, &user.ID, &user.UserName, &user.Password, &user.Sex, &user.Name,
 			&user.Age, &user.Icon, &user.Signature, &user.CreateDate, &user.LastDate, &user.Status)
 
 		if err != nil {
@@ -76,5 +77,6 @@ func (a *EventFriendGet) Parse(jsonReslut map[string]interface{}, client net.Con
 
 	// 发送好友列表给目标
 	result, _ := json.Marshal(users)
+	result = []byte(fmt.Sprintf("{\"type\" : \"FriendGet\", friends : %s}", string(result)))
 	client.Write(result)
 }
