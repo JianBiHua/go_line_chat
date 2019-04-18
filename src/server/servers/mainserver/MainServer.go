@@ -6,9 +6,11 @@ import (
 	"GoWorkspace/go_line_chat/src/server/configer"
 	"GoWorkspace/go_line_chat/src/server/event"
 	"GoWorkspace/go_line_chat/src/server/servers"
+	"GoWorkspace/go_line_chat/src/server/sql"
 	"encoding/json"
 	"fmt"
 	"net"
+	"time"
 )
 
 // MainServer 主服务器结构体.
@@ -111,6 +113,15 @@ func (mainServer *MainServer) onClientDisConnect(client net.Conn) {
 	configer.ClientMap.Range(func(k, v interface{}) bool {
 		fmt.Println("iterate:", k, v)
 		if v == client {
+			// 如果是登陆用户断开连接时
+			userName := configer.ClientMap.GetKey(v)
+			if len(userName) > 0 {
+				// 刷新LastDate时间
+				cmd := fmt.Sprintf("UPDATE %s SET lastDate=\"%s\" WHERE userName=\"%s\"",
+					sql.SQLTableUser, time.Now().Format("2006-01-02 15:04:05"), userName)
+				sql.GetInstance().UpdateOrDelete(cmd)
+			}
+
 			configer.ClientMap.Delete(k)
 			return false
 		}
