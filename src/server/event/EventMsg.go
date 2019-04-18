@@ -36,8 +36,12 @@ func (a *EventMsg) Parse(jsonReslut map[string]interface{}, client net.Conn) {
 	}, &lastDate)
 
 	// 获取最后一次登录到这此登录的所有消息
-	cmd = fmt.Sprintf("select * from %s where groupId=%v and sendDate>\"%v\"",
-		sql.SQLTableChatMsg, jsonReslut["group"], lastDate)
+	// cmd = fmt.Sprintf("select * from %s where groupId=%v and sendDate>\"%v\"",
+	// 	sql.SQLTableChatMsg, jsonReslut["group"], lastDate)
+
+	// 获取所有消息
+	cmd = fmt.Sprintf("select * from %s where groupId=%v",
+		sql.SQLTableChatMsg, jsonReslut["group"])
 
 	var msg model.UserChatMessage
 	var msgList []model.UserChatMessage
