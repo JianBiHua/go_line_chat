@@ -1,4 +1,4 @@
-module go_line_chat/src/server
+module go_line_chat
 
 go 1.12
 
